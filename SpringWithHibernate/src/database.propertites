@@ -1,0 +1,5 @@
+username=system
+password=pushpa
+oracledriver=oracle.jdbc.driver.OracleDriver
+url=jdbc:oracle:thin:@localhost:1521:xe
+dailect=org.hibernate.dialect.Oracle10gDialect

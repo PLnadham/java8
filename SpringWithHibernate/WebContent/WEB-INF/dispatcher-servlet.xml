@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+	<context:annotation-config></context:annotation-config>
+	
+	<context:component-scan base-package="com.lc.*"></context:component-scan>
+	
+	<context:property-placeholder location="classpath:database.propertites"/>
+	<bean
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="/WEB-INF/jsp/" />
+		<property name="suffix" value=".jsp" />
+	</bean>
+	<bean id="datasource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		
+		<!-- <property name="driverClassName" value="oracle.jdbc.driver.OracleDriver" />
+		<property name="url" value="jdbc:oracle:thin:@localhost:1521:xe" />
+		<property name="username" value="system" />
+		<property name="password" value="pushpa" /> -->
+
+		<property name="driverClassName" value="${oracledriver}" />
+		<property name="url" value="${url}" />
+		<property name="username" value="${username}" />
+		<property name="password" value="${password}" />
+	</bean>
+	
+	<bean class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean" id="sessionfactory">
+			<property name="dataSource" ref="datasource"/>
+			<property name="annotatedClasses">
+				<list>
+						<value>com.lc.entity.LoginEntity</value>
+				</list>
+			
+			</property>
+			<property name="hibernateProperties">
+				<props>
+					<prop key="hibernate.dialect">${dailect}</prop>
+					<prop key="hibernate.show_sql">true</prop>
+					<prop key="hibernate.hbm2ddl.auto">update</prop>
+					<!-- <prop key="format_sql">true</prop> -->
+				</props>
+			</property>
+	</bean>
+	<!-- <bean class="transactionma"></bean> -->
+	<bean class="org.springframework.orm.hibernate3.HibernateTemplate" id="templet">
+		<property name="sessionFactory" ref="sessionfactory"/>
+	
+	</bean>
+
+	<mvc:interceptors>
+		<bean class="com.lc.entity.SessionTimeoutInterceptor"/>
+	</mvc:interceptors>
+	
+	
+	
+	
+	
+	<bean id="messageSource"
+		class="org.springframework.context.support.ResourceBundleMessageSource">
+		<property name="basename" value="messages" />
+	</bean>
+	
+	<bean id="localeResolver"
+		class="org.springframework.web.servlet.i18n.SessionLocaleResolver">
+		<property name="defaultLocale" value="en" />
+	</bean>
+
+	<bean id="localeChangeInterceptor"
+		class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
+		<property name="paramName" value="language" />
+	</bean>
+
+	<bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping">
+        <property name="interceptors">
+            <list>
+                <ref bean="localeChangeInterceptor" />
+            </list>
+        </property>
+    </bean>
+	
+	
+
+</beans>
