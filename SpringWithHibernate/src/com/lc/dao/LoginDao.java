@@ -26,6 +26,7 @@ public class LoginDao {
 	{
 		LoginEntity le=	templet.get(LoginEntity.class, name);
 		return le;
+		//jhjhkkjdfkdsjbckmnbjk
 	}
 	
 	public void delete(String name){
