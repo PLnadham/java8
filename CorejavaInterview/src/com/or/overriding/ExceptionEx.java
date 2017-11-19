@@ -8,6 +8,7 @@ public class ExceptionEx {
 		System.out.println("55");
 		System.out.println("55");
 		System.out.println("55");
+		System.out.println("gfhjgh");
 		System.out.println("55");
 		try{
 			System.out.println(10/0);
